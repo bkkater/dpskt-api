@@ -2,13 +2,23 @@ const PlayerModel = require('../models/Player');
 
 const playerController = {
   create: async (req, res) => {
+    const {discordId,player:{
+      id,
+      name,
+      role,
+      isAdmin,
+      statusClock
+    }} = req.body; 
     try {
       const player = {
-        discordId: req.body.discordId,
-        name: req.body.name,
-        role: req.body.role,
-        isAdmin: req.body.isAdmin,
-        date: req.body.isAdmin.date,
+        discordId,
+        player:{
+          id,
+          name,
+          role,
+          isAdmin,
+          statusClock,
+        }
       };
 
       const response = await PlayerModel.create(player);
@@ -77,6 +87,9 @@ const playerController = {
       role: req.body.role,
       date: req.body.date,
       isAdmin: req.body.isAdmin,
+      statusClock: req.body.statusClock,
+      clockStartAt: req.body.clockStartAt,
+      clockEndAt: req.body.clockEndAt,
     };
 
     const updateService = await PlayerModel.findByIdAndUpdate(
