@@ -1,13 +1,18 @@
 const ClockModel = require('../models/Clock');
-
+const { player: PlayerModel } = require('../models/Player');
 const clockController = {
   create: async (req, res) => {
     try {
-      const clock = {
-        player: req.body.player,
-        startAt: req.body.startAt,
-        endAt: req.body.endAt,
-      };
+        const {
+            startAt,
+            endAt,
+          } = req.body;
+      
+        const clock = {
+            player: req.body,
+            startAt,
+            endAt,
+        };
 
       const response = await ClockModel.create(clock);
 
@@ -27,9 +32,10 @@ const clockController = {
   },
   get: async (req, res) => {
     try {
-      const discordId = req.params.id;
+        const discordId = req.params.id;
+        
 
-      const clock = await ClockModel.findById({ discordId });
+      const clock = await ClockModel.findOne({ discordId });
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
@@ -43,8 +49,8 @@ const clockController = {
   delete: async (req, res) => {
     try {
       const discordId = req.params.id;
-
-      const clock = await ClockModel.findById({ discordId });
+    
+      const clock = await ClockModel.findOne({ discordId });
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
@@ -63,7 +69,7 @@ const clockController = {
     try {
       const discordId = req.params.id;
 
-      const clock = await ClockModel.findById({ discordId });
+      const clock = await ClockModel.findOne({ discordId });
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });

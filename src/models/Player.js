@@ -4,7 +4,6 @@ const PlayerSchema = new mongoose.Schema(
   {
     discordId: {
       type: String,
-      required: true,
     },
     player: {
       id: {
