@@ -6,7 +6,7 @@ const PlayerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    player: {      
+    player: {
       id: {
         type: String,
         required: true,
@@ -40,12 +40,12 @@ const PlayerSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
-    },        
+    },
   },
   { timestamps: true }
 );
-const Player = mongoose.model('Player', PlayerSchema);
+
 module.exports = {
-  Player,
+  Player: mongoose.model('Player', PlayerSchema),
   PlayerSchema,
 };

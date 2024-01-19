@@ -1,24 +1,22 @@
-const PlayerModel = require('../models/Player');
+const { Player: PlayerModel } = require('../models/Player');
 
 const playerController = {
   create: async (req, res) => {
-    const {discordId,player:{
-      id,
-      name,
-      role,
-      isAdmin,
-      statusClock
-    }} = req.body; 
+    const {
+      player: { id, name, role, isAdmin, statusClock },
+      discordId,
+    } = req.body;
+
     try {
       const player = {
         discordId,
-        player:{
+        player: {
           id,
           name,
           role,
           isAdmin,
           statusClock,
-        }
+        },
       };
 
       const response = await PlayerModel.create(player);
@@ -74,8 +72,11 @@ const playerController = {
     }
   },
   update: async (req, res) => {
-    const discordId = req.params.id;
+    const {
+      player: { id, name, role, isAdmin, statusClock },
+    } = req.body;
 
+    const discordId = req.params.id;
     const player = await PlayerModel.findOne({ discordId });
 
     if (!player) {
@@ -83,13 +84,14 @@ const playerController = {
     }
 
     const playerData = {
-      name: req.body.name,
-      role: req.body.role,
-      date: req.body.date,
-      isAdmin: req.body.isAdmin,
-      statusClock: req.body.statusClock,
-      clockStartAt: req.body.clockStartAt,
-      clockEndAt: req.body.clockEndAt,
+      discordId,
+      player: {
+        id,
+        name,
+        role,
+        isAdmin,
+        statusClock,
+      },
     };
 
     const updateService = await PlayerModel.findByIdAndUpdate(
