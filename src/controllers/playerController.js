@@ -8,6 +8,7 @@ const playerController = {
         name: req.body.name,
         role: req.body.role,
         isAdmin: req.body.isAdmin,
+        date: req.body.isAdmin.date,
       };
 
       const response = await PlayerModel.create(player);
@@ -28,7 +29,7 @@ const playerController = {
   },
   get: async (req, res) => {
     try {
-      const discordId = req.params.discordId;
+      const discordId = req.params.id;
 
       const player = await PlayerModel.findOne({ discordId });
 
@@ -74,6 +75,7 @@ const playerController = {
     const playerData = {
       name: req.body.name,
       role: req.body.role,
+      date: req.body.date,
       isAdmin: req.body.isAdmin,
     };
 
