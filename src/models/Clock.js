@@ -1,24 +1,19 @@
 const mongoose = require('mongoose');
 
-const { PlayerSchema} = require('./User');
-
 const clockSchema = new mongoose.Schema(
-{
-    player: {
-        type: PlayerSchema,
-        required: true,
-        select: false,
+  {
+    userId: {
+      type: String,
+      required: true,
     },
     startAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
     },
     endAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
     },
-
-
-}, {timestamps: true})
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model('Clock', clockSchema);

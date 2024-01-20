@@ -18,16 +18,13 @@ const userController = {
           statusClock,
         },
       };
-      
-
-     
 
       const response = await UserModel.create(user);
 
       res.status(201).json({ response, msg: 'Registro criado com sucesso!' });
     } catch (err) {
       if (err.code === 11000) {
-       return res.status(400).json({ msg: 'Id já cadastrado!' });
+        return res.status(400).json({ msg: 'Id já cadastrado!' });
       }
       console.log(err);
     }

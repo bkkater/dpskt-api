@@ -1,18 +1,22 @@
 const ClockModel = require('../models/Clock');
+
 const { User: UserModel } = require('../models/User');
+
 const clockController = {
   create: async (req, res) => {
     try {
-        const {
-            startAt,
-            endAt,
-          } = req.body;
-      
-        const clock = {
-            player: req.body,
-            startAt,
-            endAt,
-        };
+      const { _id } = req.body;
+
+      const clock = {
+        userId: _id,
+        startAt: Date.now(),
+      };
+
+      const user = await UserModel.findById(_id);
+
+      await UserModel.findByIdAndUpdate(_id, {
+        player: { ...user.player, statusClock: true },
+      });
 
       const response = await ClockModel.create(clock);
 
@@ -31,9 +35,9 @@ const clockController = {
     }
   },
   get: async (req, res) => {
+    // ID do player
     try {
-        const discordId = req.params.id;
-        
+      const discordId = req.params.id;
 
       const clock = await ClockModel.findOne({ discordId });
 
@@ -47,9 +51,10 @@ const clockController = {
     }
   },
   delete: async (req, res) => {
+    // ID do banco
     try {
       const discordId = req.params.id;
-    
+
       const clock = await ClockModel.findOne({ discordId });
 
       if (!clock) {
@@ -66,6 +71,7 @@ const clockController = {
     }
   },
   update: async (req, res) => {
+    // ID do banco
     try {
       const discordId = req.params.id;
 
