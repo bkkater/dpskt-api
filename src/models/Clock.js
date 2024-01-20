@@ -1,20 +1,21 @@
 const mongoose = require('mongoose');
 
-const { PlayerSchema} = require('./Player');
+const { PlayerSchema} = require('./User');
 
 const clockSchema = new mongoose.Schema(
 {
     player: {
         type: PlayerSchema,
-        required: true
+        required: true,
+        select: false,
     },
     startAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     endAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
 
 

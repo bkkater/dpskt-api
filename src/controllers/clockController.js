@@ -1,5 +1,5 @@
 const ClockModel = require('../models/Clock');
-const { player: PlayerModel } = require('../models/Player');
+const { User: UserModel } = require('../models/User');
 const clockController = {
   create: async (req, res) => {
     try {
