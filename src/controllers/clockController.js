@@ -1,5 +1,6 @@
 const ClockModel = require('../models/Clock');
 
+
 const { User: UserModel } = require('../models/User');
 
 const clockController = {
@@ -37,25 +38,23 @@ const clockController = {
   get: async (req, res) => {
     // ID do player
     try {
-      const discordId = req.params.id;
-
-      const clock = await ClockModel.findOne({ discordId });
+      const { id } = req.params;
+      const user = await UserModel.findOne({ id });
+      const clock = await ClockModel.findOne( {userId: user._id.toString()}).sort({ createdAt: -1});
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
       }
-
       res.json(clock);
     } catch (err) {
       console.log(err);
     }
   },
   delete: async (req, res) => {
-    // ID do banco
+    // ID do banco do clock
     try {
-      const discordId = req.params.id;
-
-      const clock = await ClockModel.findOne({ discordId });
+      const { id } = req.params;
+      const clock = await ClockModel.findById(id);
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
@@ -73,17 +72,21 @@ const clockController = {
   update: async (req, res) => {
     // ID do banco
     try {
-      const discordId = req.params.id;
-
-      const clock = await ClockModel.findOne({ discordId });
+      const { id } = req.params;
+      const user = await UserModel.findOne({ id });
+      const clock = await ClockModel.findOne( {userId: user._id.toString()}).sort({ createdAt: -1});
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
       }
 
+      await UserModel.findByIdAndUpdate(user._id, {
+        player: { ...user.player, statusClock: false },
+      });
+
+ 
       const updateService = await ClockModel.findByIdAndUpdate(
-        clock._id.toString(),
-        req.body
+        clock._id.toString(), {...clock, endAt: Date.now()} 
       );
 
       res.json({ msg: 'Clock atualizado com sucesso!' });

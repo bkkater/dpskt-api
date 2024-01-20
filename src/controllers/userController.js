@@ -3,7 +3,7 @@ const { User: UserModel } = require('../models/User');
 const userController = {
   create: async (req, res) => {
     const {
-      player: { id, name, role, isAdmin, statusClock },
+      player: { id, name, corporation, role, isAdmin, statusClock },
       discordId,
     } = req.body;
 
@@ -13,6 +13,7 @@ const userController = {
         player: {
           id,
           name,
+          corporation,
           role,
           isAdmin,
           statusClock,
@@ -91,6 +92,7 @@ const userController = {
       player: {
         id,
         name,
+        corporation,
         role,
         isAdmin,
         statusClock,

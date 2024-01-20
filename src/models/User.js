@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      corporation:{
+        type: String,
+        enum: ['DPSKT','FBI','GOT'],
+        default: 'DPSKT',
+      },
       role: {
         type: String,
         enum: [
