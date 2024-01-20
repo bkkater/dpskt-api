@@ -11,6 +11,7 @@ const clockController = {
       const clock = {
         userId: _id,
         startAt: Date.now(),
+        endAt: null,
       };
 
       const user = await UserModel.findById(_id);
@@ -72,24 +73,37 @@ const clockController = {
   update: async (req, res) => {
     // ID do banco
     try {
+      // é pra pegar o id do player vem do front
       const { id } = req.params;
+      // acha o player pelo id do player
       const user = await UserModel.findOne({ id });
+      // acha o ultimo clock do player
       const clock = await ClockModel.findOne( {userId: user._id.toString()}).sort({ createdAt: -1});
 
+      // se não achar o clock
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
       }
 
-      await UserModel.findByIdAndUpdate(user._id, {
-        player: { ...user.player, statusClock: false },
-      });
+      // await UserModel.findByIdAndUpdate(user._id, {
+      //   player: { ...user.player, statusClock: false },
+      // });
+      const clockData = {
+        userId: user._id,
+        startAt: clock.startAt,
+        endAt: Date.now(),
+      };
 
- 
       const updateService = await ClockModel.findByIdAndUpdate(
-        clock._id.toString(), {...clock, endAt: Date.now()} 
+        clock._id.toString(), 
+        clockData
       );
 
-      res.json({ msg: 'Clock atualizado com sucesso!' });
+      res
+      .status(200)
+      .json({ updateService, msg: 'Clock atualizado com sucesso!' });
+
+      
     } catch (err) {
       console.log(err);
     }
