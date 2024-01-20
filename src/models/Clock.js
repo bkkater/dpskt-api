@@ -7,13 +7,13 @@ const clockSchema = new mongoose.Schema(
       required: true,
     },
     startAt: {
-      type: Date,
+      type: String,
     },
     endAt: {
-      type: Date,
+      type: String,
     },
   },
-  { timestamps: true }
+
 );
 
 module.exports = mongoose.model('Clock', clockSchema);

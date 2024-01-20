@@ -1,16 +1,21 @@
 const ClockModel = require('../models/Clock');
-
+const { listTimeZones } = require('timezone-support')
+const { parseFromTimeZone, formatToTimeZone } = require('date-fns-timezone')
+ 
+// List canonical time zone names: [ 'Africa/Abidjan', ... ]
+const timeZones = listTimeZones()
 
 const { User: UserModel } = require('../models/User');
-
+const { addHours } = require('date-fns');
+const format = ''
 const clockController = {
   create: async (req, res) => {
     try {
       const { _id } = req.body;
-
+      
       const clock = {
         userId: _id,
-        startAt: Date.now(),
+        startAt: new Date(formatToTimeZone(addHours(Date.now(),-1),format,{timeZone: 'America/Sao_Paulo'})),
         endAt: null,
       };
 
@@ -41,7 +46,7 @@ const clockController = {
     try {
       const { id } = req.params;
       const user = await UserModel.findOne({ id });
-      const clock = await ClockModel.findOne( {userId: user._id.toString()}).sort({ createdAt: -1});
+      const clock = await ClockModel.find( {userId: user._id.toString()}).sort({ createdAt: -1});
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
@@ -85,13 +90,14 @@ const clockController = {
         res.status(404).json({ msg: 'Clock não encontrado!' });
       }
 
-      // await UserModel.findByIdAndUpdate(user._id, {
-      //   player: { ...user.player, statusClock: false },
-      // });
+      await UserModel.findByIdAndUpdate(user._id, {
+        player: { ...user.player, statusClock: false },
+      });
+
       const clockData = {
         userId: user._id,
         startAt: clock.startAt,
-        endAt: Date.now(),
+        endAt: new Date(formatToTimeZone(addHours(Date.now(),-1),format,{timeZone: 'America/Sao_Paulo'})),
       };
 
       const updateService = await ClockModel.findByIdAndUpdate(
@@ -103,7 +109,7 @@ const clockController = {
       .status(200)
       .json({ updateService, msg: 'Clock atualizado com sucesso!' });
 
-      
+
     } catch (err) {
       console.log(err);
     }
