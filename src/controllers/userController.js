@@ -77,7 +77,7 @@ const userController = {
   },
   update: async (req, res) => {
     const {
-      player: { id, name, role, isAdmin, statusClock },
+      player: { id, name, role, isAdmin, statusClock, corporation },
     } = req.body;
 
     const discordId = req.params.id;
