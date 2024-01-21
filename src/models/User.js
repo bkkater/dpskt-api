@@ -15,9 +15,9 @@ const UserSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      corporation:{
+      corporation: {
         type: String,
-        enum: ['DPSKT','FBI','GOT'],
+        enum: ['DPSKT', 'FBI', 'GOT'],
         default: 'DPSKT',
       },
       role: {
@@ -29,8 +29,10 @@ const UserSchema = new mongoose.Schema(
           'Sargento',
           'Sub-Tenente',
           'Tenente',
-          'Major',
           'Capitão',
+          'Major',
+          'Tenente-Coronel',
+          'Coronel',
           'Sub-Comando',
           'Comando',
         ],
