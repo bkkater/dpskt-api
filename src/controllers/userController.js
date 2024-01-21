@@ -34,7 +34,10 @@ const userController = {
     try {
       const users = await UserModel.find();
 
-      res.json(users);
+      const entries = await UserModel.countDocuments();
+      
+
+      res.json([users, entries]);
     } catch (err) {
       console.log(err);
     }

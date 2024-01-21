@@ -8,6 +8,8 @@ const timeZones = listTimeZones()
 const { User: UserModel } = require('../models/User');
 const { addHours } = require('date-fns');
 const format = ''
+
+
 const clockController = {
   create: async (req, res) => {
     try {
@@ -56,6 +58,16 @@ const clockController = {
       console.log(err);
     }
   },
+  getOnlineClocks: async (req, res) => {
+    try {
+      const clocks = await ClockModel.find({ endAt: null });
+      const AmountOfOnlineClocks = clocks.length;
+      
+      res.json([clocks, AmountOfOnlineClocks]);
+    } catch (err) {
+      console.log(err);
+    }
+  },
   delete: async (req, res) => {
     // ID do banco do clock
     try {
@@ -68,13 +80,13 @@ const clockController = {
 
       const deleteService = await ClockModel.findByIdAndDelete(
         clock._id.toString()
-      );
-
-      res.json({ msg: 'Clock deletado com sucesso!' });
-    } catch (err) {
-      console.log(err);
-    }
-  },
+        );
+        
+        res.json({ msg: 'Clock deletado com sucesso!' });
+      } catch (err) {
+        console.log(err);
+      }
+    },
   update: async (req, res) => {
     // ID do banco
     try {
