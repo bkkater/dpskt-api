@@ -36,8 +36,8 @@ const userController = {
 
       const entries = await UserModel.countDocuments();
       
-
-      res.json([users, entries]);
+      const onlineClocks = await UserModel.find({ 'player.statusClock': true });
+      res.json({ users, entries, onlineClocks: onlineClocks.length});
     } catch (err) {
       console.log(err);
     }

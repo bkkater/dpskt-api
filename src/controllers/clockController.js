@@ -58,16 +58,6 @@ const clockController = {
       console.log(err);
     }
   },
-  getOnlineClocks: async (req, res) => {
-    try {
-      const clocks = await ClockModel.find({ endAt: null });
-      const AmountOfOnlineClocks = clocks.length;
-      
-      res.json([clocks, AmountOfOnlineClocks]);
-    } catch (err) {
-      console.log(err);
-    }
-  },
   delete: async (req, res) => {
     // ID do banco do clock
     try {
