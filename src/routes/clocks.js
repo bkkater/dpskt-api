@@ -12,6 +12,6 @@ router
   .route('/clocks/:hash')
   .delete((req, res) => clockController.delete(req, res));
 
-router.route('/clocks/:id').put((req, res) => clockController.update(req, res));
+router.route('/clocks').put((req, res) => clockController.update(req, res));
 
 module.exports = router;
