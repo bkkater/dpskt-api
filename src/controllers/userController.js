@@ -3,7 +3,7 @@ const { User: UserModel } = require('../models/User');
 const userController = {
   create: async (req, res) => {
     const {
-      player: { id, name, corporation, role, isAdmin, statusClock },
+      player: { id, name, corporation, role, isAdmin, statusClock, joinedAt},
       discordId,
     } = req.body;
 
@@ -17,6 +17,7 @@ const userController = {
           role,
           isAdmin,
           statusClock,
+          joinedAt,
         },
       };
 
@@ -37,6 +38,7 @@ const userController = {
       const entries = await UserModel.countDocuments();
       
       const onlineClocks = await UserModel.find({ 'player.statusClock': true });
+
       res.json({ users, entries, onlineClocks: onlineClocks.length});
     } catch (err) {
       console.log(err);
@@ -57,10 +59,37 @@ const userController = {
       console.log(err);
     }
   },
+  getByName: async (req, res) => {
+    try{
+      const name = req.query.name;
+
+      const regexName = new RegExp(name, 'i');
+
+      const user = await UserModel.find({"player.name":regexName});
+      
+      res.json(user); 
+    }
+    catch(err){
+      console.log(err);
+    }
+  },
+  getById: async (req, res) => {
+    try{
+      const playerId = req.query.id;
+
+
+      const user = await UserModel.find({"player.id":playerId});
+      
+      res.json(user); 
+    }
+    catch(err){
+      console.log(err);
+    }
+  },
   delete: async (req, res) => {
     try {
       const discordId = req.params.id;
-      console.log(req.params);
+
       const user = await UserModel.findOne({ discordId });
 
       if (!user) {
@@ -80,7 +109,7 @@ const userController = {
   },
   update: async (req, res) => {
     const {
-      player: { id, name, role, isAdmin, statusClock, corporation },
+      player: { id, name, role, isAdmin, statusClock, corporation, joinedAt},
     } = req.body;
 
     const discordId = req.params.id;
@@ -99,6 +128,7 @@ const userController = {
         role,
         isAdmin,
         statusClock,
+        joinedAt,
       },
     };
 

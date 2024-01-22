@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
+      joinedAt: {
+        type: String,
+        required: true,
+      },
     },
   },
   { timestamps: true }

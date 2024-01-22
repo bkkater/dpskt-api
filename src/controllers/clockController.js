@@ -13,19 +13,15 @@ const format = ''
 const clockController = {
   create: async (req, res) => {
     try {
-      const { _id } = req.body;
-      
+      const { userId,hash,startAt } = req.body;
+
+      await UserModel.findByIdAndUpdate(userId, {$set: {'player.statusClock': true}}, {new: true});
+
       const clock = {
-        userId: _id,
-        startAt: new Date(formatToTimeZone(addHours(Date.now(),-1),format,{timeZone: 'America/Sao_Paulo'})),
-        endAt: null,
+        userId,
+        hash,
+        startAt,
       };
-
-      const user = await UserModel.findById(_id);
-
-      await UserModel.findByIdAndUpdate(_id, {
-        player: { ...user.player, statusClock: true },
-      });
 
       const response = await ClockModel.create(clock);
 
@@ -46,8 +42,10 @@ const clockController = {
   get: async (req, res) => {
     // ID do player
     try {
-      const { id } = req.params;
-      const user = await UserModel.findOne({ id });
+      const id  = req.params.id;
+
+      const user = await UserModel.findOne({ 'player.id': id });
+
       const clock = await ClockModel.find( {userId: user._id.toString()}).sort({ createdAt: -1});
 
       if (!clock) {
@@ -61,8 +59,11 @@ const clockController = {
   delete: async (req, res) => {
     // ID do banco do clock
     try {
-      const { id } = req.params;
-      const clock = await ClockModel.findById(id);
+      // pega o hash pelo parametro do front
+      const { hash } = req.params;
+
+      // acha
+      const clock = await ClockModel.findOne({hash});
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
@@ -70,7 +71,7 @@ const clockController = {
 
       const deleteService = await ClockModel.findByIdAndDelete(
         clock._id.toString()
-        );
+      );
         
         res.json({ msg: 'Clock deletado com sucesso!' });
       } catch (err) {
@@ -80,33 +81,27 @@ const clockController = {
   update: async (req, res) => {
     // ID do banco
     try {
-      // é pra pegar o id do player vem do front
-      const { id } = req.params;
-      // acha o player pelo id do player
-      const user = await UserModel.findOne({ id });
-      // acha o ultimo clock do player
-      const clock = await ClockModel.findOne( {userId: user._id.toString()}).sort({ createdAt: -1});
-
-      // se não achar o clock
+      // é pra pegar os parametros do front pelo body 
+      const {hash,endAt,userId} = req.body;
+      
+      // pega o clock pelo hash
+      const clock = await ClockModel.findOne({ hash });
+      
+      // se n achar da erro
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });
       }
 
-      await UserModel.findByIdAndUpdate(user._id, {
-        player: { ...user.player, statusClock: false },
-      });
+      // atualiza o status do player
+      await UserModel.findByIdAndUpdate(userId, {$set: {'player.statusClock': false}},{new: true});
 
-      const clockData = {
-        userId: user._id,
-        startAt: clock.startAt,
-        endAt: new Date(formatToTimeZone(addHours(Date.now(),-1),format,{timeZone: 'America/Sao_Paulo'})),
-      };
-
+      // atualiza o endAt do clock pelo dado do front
       const updateService = await ClockModel.findByIdAndUpdate(
         clock._id.toString(), 
-        clockData
+        {$set: {endAt}}
       );
 
+      
       res
       .status(200)
       .json({ updateService, msg: 'Clock atualizado com sucesso!' });
