@@ -8,8 +8,7 @@ router.route('/users').get((req, res) => userController.getAll(req, res));
 
 router.route('/users/:id').get((req, res) => userController.get(req, res));
 
-router.route('/user').get((req, res) => (userController.getByName(req, res),userController.getById(req, res)));
-
+router.route('/user').get((req, res) => userController.getByQueryParm(req, res));
 
 router
   .route('/users/:id')

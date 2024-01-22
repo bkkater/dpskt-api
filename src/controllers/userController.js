@@ -59,28 +59,25 @@ const userController = {
       console.log(err);
     }
   },
-  getByName: async (req, res) => {
+  getByQueryParm: async (req, res) => {
     try{
-      const name = req.query.name;
+      let queryParam;
 
-      const regexName = new RegExp(name, 'i');
+      if (req.query.name) {
+        queryParam = { 'player.name': new RegExp(req.query.name, 'i')};
+      } else if (req.query.id) {
+        queryParam = { 'player.id': req.query.id };
+      } else {
+        return res.status(400).json({ msg: 'Parametro não encontrado! Necessário passar id ou nome' });
+      }
 
-      const user = await UserModel.find({"player.name":regexName});
-      
-      res.json(user); 
-    }
-    catch(err){
-      console.log(err);
-    }
-  },
-  getById: async (req, res) => {
-    try{
-      const playerId = req.query.id;
+      const users = await UserModel.find(queryParam);
 
+      if (!users || users.length === 0) {
+        return res.status(404).json({ msg: 'Nenhum usuário encontrado' });
+      }
 
-      const user = await UserModel.find({"player.id":playerId});
-      
-      res.json(user); 
+      res.json(users);
     }
     catch(err){
       console.log(err);
