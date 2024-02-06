@@ -24,24 +24,50 @@ const clockController = {
       console.log(err);
     }
   },
-  getAll: async (req, res) => {
+  get: async (req, res) => {
     try {
-      const clocks = await ClockModel.find();
+      const { id } = req.params;
+      const { startDate, endDate } = req.query;
 
-      res.json(clocks);
+      const user = await UserModel.findOne({ 'player.id': id });
+
+      if (!user) {
+        res.status(404).json({ msg: 'Usuário não encontrado!' });
+      }
+
+      let query = { userId: user._id.toString() };
+
+      if (startDate && endDate) {
+        query.createdAt = {
+          $gte: startDate,
+          $lte: endDate,
+        };
+      }
+
+      const clock = await ClockModel.find(query).sort({ createdAt: -1 });
+
+      if (!clock) {
+        return res.status(404).json({ msg: 'Clock não encontrado!' });
+      }
+
+      res.json(clock);
     } catch (err) {
       console.log(err);
     }
   },
-  get: async (req, res) => {
+  getByRange: async (req, res) => {
     try {
-      const id = req.params.id;
+      const { id, range } = req.body;
 
       const user = await UserModel.findOne({ 'player.id': id });
 
-      const clock = await ClockModel.find({ userId: user._id.toString() }).sort(
-        { createdAt: -1 }
-      );
+      const clock = await ClockModel.find({
+        userId: user._id.toString(),
+        createdAt: {
+          $gte: range[0],
+          $lte: range[1],
+        },
+      }).sort({ createdAt: -1 });
 
       if (!clock) {
         res.status(404).json({ msg: 'Clock não encontrado!' });

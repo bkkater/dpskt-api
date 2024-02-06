@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 
 const clockSchema = new mongoose.Schema(
   {
-    // receber hash do player
-    // modificar update
     hash: {
       type: String,
       required: true,

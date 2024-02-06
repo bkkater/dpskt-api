@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "build": "node src/app.js"
   },
-  "author": "",
+  "author": "katerx",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
