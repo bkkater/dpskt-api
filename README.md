@@ -1,15 +1,9 @@
-<p align="center">
-   <img src=".github/mockup.png" />
-</p>
-
-<br />
-
 <p align="center">	
   
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/bkkater/dpskt-web?color=6CBAD9&style=for-the-badge">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/bkkater/dpskt-api?color=6CBAD9&style=for-the-badge">
 
   <a href="https://github.com/bkkater/dpskt-web/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bkkater/dpskt-web?color=6CBAD9&style=for-the-badge">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bkkater/dpskt-api?color=6CBAD9&style=for-the-badge">
   </a> 
   
   <img alt="License" src="https://img.shields.io/badge/license-MIT-6CBAD9?style=for-the-badge">
